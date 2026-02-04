@@ -1,0 +1,28 @@
+Error Handling Helpline
+Group Members:
+•	Reece Willoughby
+•	Alexi Colley
+•	Nawaraj Budhathoki
+
+Project Description:
+This project is a Debugging & Programming Help platform that lets students post technical programming problems and receive help from the community. Users can share error messages, code snippets and environment issues. Others can respond with explanations and debugging guidance. The platforms’ goal is to promote collective learning, support and help in developing problem solving skills.
+
+Code of Conduct:
+PASTE YOUR WORK HERE!!!!!!!!
+
+Persona 1:
+PASTE YOUR WORK HERE!!!!!!!!
+
+Persona 2:
+PASTE YOUR WORK HERE!!!!!!!!
+
+Ethical issues:
+PASTE YOUR WORK HERE!!!!!!!!
+
+Meeting Records:
+PASTE YOUR WORK HERE!!!!!!!!
+
+Task board:
+https://github.com/users/WILR96/projects/1
+GitHub:
+https://github.com/WILR96/ErrorHandlingHelpline
