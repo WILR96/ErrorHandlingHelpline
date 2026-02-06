@@ -36,7 +36,21 @@ Please see the Code of Conduct for expected behaviour.
 
 ## Getting Started (Development)
 
-Instructions for running the project locally will be added as the project setup is finalised.
+You will need to install Docker and Visual Studio Code.
+
+''Once they are both set up, you will need to open VScode and 'Clone Git Repositry'.'' 
+
+Enter this repo's URL in the text area and press enter. This will download this repositry to the folder of your choice. 
+
+''Once it has completed downloading, in VScode please go to Terminal -> New Terminal and enter 'npm install' which will download nessesary files needed to run the project.''
+
+Once this has completed, run Docker and then in the VScode terminal you had open earlier please run docker-compose up. You should see a few new entrys in the docker window. 
+
+''Now as long as everything is running fine, login to phpMyAdmin and add the contents of 'sd2-db.sql' to the SQL tab and confirm changes.''
+
+Everything should now be set up.
+
+If there are any questions, please raise them on the teams chat.
 
 ## Licence
 
