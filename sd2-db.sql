@@ -33,6 +33,18 @@ CREATE TABLE IF NOT EXISTS `test_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
+-- Table structure for table `tickets`
+--
+
+CREATE TABLE IF NOT EXISTS `tickets` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `title` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
+  `status` ENUM('open', 'in_progress', 'closed') DEFAULT 'open',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
 -- Dumping data for table `test_table`
 --
 
