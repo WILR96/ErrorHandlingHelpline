@@ -17,10 +17,6 @@ Problems and solutions are shared for learning and reference.
 
 We are using GitHub Projects to manage tasks and sprint work.
 
-If you are part of the group:
-
-**Send your GitHub username on Teams** so you can be given access to the Kanban board
-
 Kanban board link: https://github.com/users/WILR96/projects/1
 
 
