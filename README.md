@@ -56,6 +56,8 @@ You should see new entries in the docker window.
 
 Now as long as everything is running fine, login to phpMyAdmin and add the contents of *sd2-db.sql* to the SQL tab and confirm changes.
 
+ Its mine first test.
+ 
 Everything should now be set up.
 
 If there are any questions, please raise them on the teams chat.
