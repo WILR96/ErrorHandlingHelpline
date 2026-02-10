@@ -60,9 +60,6 @@ Everything should now be set up.
 
 If there are any questions, please raise them on the teams chat.
 
-
-gopsjfsjfpos
-
 ## Licence
 
 This project is for educational purposes as part of a university module.
