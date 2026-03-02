@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  section.hero
+    h1 Error Handling Helpline
+    p A place to get help for your errors.
+    a.button(href="/sign-up") Get Started - Sign up Today!
+
+  section.posts-preview
+    h2 Latest Posts
+
+    if !posts || posts.length === 0
+      p No posts yet... suspiciously error-free.
+    else
+      .posts
+        each post in posts
+          - const preview = post.content.length > 150 ? post.content.substring(0, 150) + "..." : post.content
+          a(href=`/posts/${post.id}`)
+          .post-card
+            h3= post.title
+            p= preview
+            

@@ -1,0 +1,28 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title #{title || "Error Handling Helpline"}
+    link(rel="stylesheet", href="/styles.css")
+
+  body
+    .app
+      aside.sidebar
+        h2.logo Error Handling Helpline
+        nav
+          ul
+            li
+              a(class=active === "archives" ? "active" : "", href="/archives") Archives
+            li
+              a(class=active === "leaderboards" ? "active" : "", href="/leaderboards") Leaderboards
+            li
+              a(class=active === "posts" ? "active" : "", href="/posts") Posts
+            li
+              a(class=active === "login" ? "active" : "", href="/login") Login
+
+      main.content
+        block content
+
+    footer.footer
+      p © #{new Date().getFullYear()} Error Handling Helpline

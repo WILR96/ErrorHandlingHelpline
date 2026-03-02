@@ -7,12 +7,68 @@ var app = express();
 // Add static files location
 app.use(express.static("static"));
 
+//Set viewengine to pug.
+app.set('view engine', 'pug');
+app.set('views', './app/views')
+
 // Get the functions in the db.js file to use
 const db = require('./services/db');
 
 // Create a route for root - /
-app.get("/", function(req, res) {
-    res.send("Hello world!");
+app.get('/', async (req, res) => {
+  const sql = 'SELECT * FROM posts ORDER BY created_at DESC LIMIT 5';
+
+  try {
+    const rows = await db.query(sql);
+
+    res.render('index', {
+      posts: rows,
+      active: null
+    });
+  } catch (err) {
+    console.error(err);
+    res.render('index', { posts: [] });
+  }
+});
+
+//List of users
+app.get('/users', function(req, res){
+    var sql = 'select * from users';
+    db.query(sql).then(results => {
+        res.render('AllUsers',{'Users':results})
+    });
+});
+
+//User profile page
+app.get('/users/:id', function(req, res){
+    var sql = 'select * from users where id =' + req.params.user;
+    db.query(sql).then(results => {
+        user = results[0];
+        res.render('userProfile',{user})
+    });
+});
+
+// Posts page (Listing page)
+app.get('/posts', function(req, res){
+
+});
+
+//Post detail page
+app.get('/posts/:id', function(req, res){
+    sql = 'select * from posts WHERE id =' + req.params.id;
+    db.query(sql).then(posts => {
+        const post = rows[0];
+        if (!post) return res.status(404).send('Post not found');
+        res.render('post', { post });
+    });
+});
+
+//Post categories
+app.get('/tags/:tag', function(req, res){
+    //C++
+    //Python
+    //Java
+    //JavaScript
 });
 
 // Create a route for testing the db
@@ -23,23 +79,6 @@ app.get("/db_test", function(req, res) {
         console.log(results);
         res.send(results)
     });
-});
-
-// Create a route for /goodbye
-// Responds to a 'GET' request
-app.get("/goodbye", function(req, res) {
-    res.send("Goodbye world!");
-});
-
-// Create a dynamic route for /hello/<name>, where name is any value provided by user
-// At the end of the URL
-// Responds to a 'GET' request
-app.get("/hello/:name", function(req, res) {
-    // req.params contains any parameters in the request
-    // We can examine it in the console for debugging purposes
-    console.log(req.params);
-    //  Retrieve the 'name' parameter and use it in a dynamically generated page
-    res.send("Hello " + req.params.name);
 });
 
 // Start server on port 3000
