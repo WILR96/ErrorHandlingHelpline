@@ -1,66 +1,91 @@
--- phpMyAdmin SQL Dump
--- version 5.1.1
--- https://www.phpmyadmin.net/
---
--- Host: db
--- Generation Time: Oct 30, 2022 at 09:54 AM
--- Server version: 8.0.24
--- PHP Version: 7.4.20
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  reputation INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE categories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) UNIQUE NOT NULL
+);
+CREATE TABLE posts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  category_id INT,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  upvotes INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+);
+CREATE TABLE post_votes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  post_id INT NOT NULL,
+  value TINYINT NOT NULL, -- 1 = upvote, -1 = downvote
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
+  UNIQUE(user_id, post_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
+CREATE TABLE responses (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  post_id INT NOT NULL,
+  user_id INT NOT NULL,
+  content TEXT NOT NULL,
+  upvotes INT DEFAULT 0,
+  is_accepted BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+  FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE response_votes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  response_id INT NOT NULL,
+  value TINYINT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
---
--- Database: `sd2-db`
---
+  UNIQUE(user_id, response_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (response_id) REFERENCES responses(id) ON DELETE CASCADE
+);
+INSERT INTO categories (name) VALUES
+('C++'),
+('Python'),
+('Node.js'),
+('Docker'),
+('MySQL'),
+('JavaScript');
+INSERT INTO users (username, email, password_hash, reputation) VALUES
+('segfault_sam', 'sam@example.com', 'hashed_pw', 120),
+('docker_dave', 'dave@example.com', 'hashed_pw', 80),
+('nullpointer_nina', 'nina@example.com', 'hashed_pw', 200),
+('panic_paul', 'paul@example.com', 'hashed_pw', 15);
+INSERT INTO posts (user_id, category_id, title, content, upvotes) VALUES
+(1, 1, 'Segmentation fault when using vectors',
+ 'My C++ program crashes when pushing into a vector. No idea why. Help.', 5),
 
--- --------------------------------------------------------
+(2, 4, 'Docker container works locally but not in production',
+ 'It runs fine on my machine but crashes on the server. Is Docker cursed?', 12),
 
---
--- Table structure for table `test_table`
---
+(3, 2, 'Python script randomly exits without error',
+ 'no logs, just sadness.', 8),
 
-CREATE TABLE `test_table` (
-  `id` int NOT NULL,
-  `name` varchar(512) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+(4, 3, 'Express app hangs on await',
+ 'Using async/await and sometimes the request never returns.', 3);
+ INSERT INTO responses (post_id, user_id, content, upvotes, is_accepted) VALUES
+(1, 3, 'Check if you are accessing freed memory. Sounds like UB.', 4, TRUE),
+(1, 2, 'Try running with valgrind.', 2, FALSE),
 
---
--- Dumping data for table `test_table`
---
+(2, 1, 'Did you copy your .env file into the container?', 6, TRUE),
 
-INSERT INTO `test_table` (`id`, `name`) VALUES
-(1, 'Lisa'),
-(2, 'Kimia');
+(3, 4, 'Maybe an unhandled exception inside a thread?', 1, FALSE),
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `test_table`
---
-ALTER TABLE `test_table`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `test_table`
---
-ALTER TABLE `test_table`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+(4, 3, 'You probably forgot to return the promise.', 5, TRUE);
