@@ -4,7 +4,11 @@ block content
   section.hero
     h1 Error Handling Helpline
     p A place to get help for your errors.
-    a.button(href="/sign-up") Get Started - Sign up Today!
+    if user
+      span Logged in as #{user.username}
+      a(href="/logout") Logout
+    else
+      a.button(href="/sign-up") Get Started - Sign up Today!
 
   section.posts-preview
     h2 Latest Posts
@@ -15,8 +19,7 @@ block content
       .posts
         each post in posts
           - const preview = post.content.length > 150 ? post.content.substring(0, 150) + "..." : post.content
-          a(href=`/posts/${post.id}`)
           .post-card
-            h3= post.title
+            h3
+              a(href=`/posts/${post.id}`)= post.title
             p= preview
-            

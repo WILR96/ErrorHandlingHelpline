@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1 Posts
+
+  ul
+    each post in posts
+      li
+        a(href=`/posts/${post.id}`) #{post.title}
