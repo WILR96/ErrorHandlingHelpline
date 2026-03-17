@@ -1,7 +1,5 @@
 # Error Handling Helpline
 
-## Project Overview
-
 Error Handling Helpline is a collaborative web application built as part of a Software Engineering group project.
 
 The aim of the project is to support debugging and programming help by allowing students to post specific technical problems and receive help from others. The focus is on collaboration, knowledge sharing, and building a supportive developer community.
@@ -48,13 +46,15 @@ npm install
 ```
 This will download nessesary files needed to run the project.
 
+***Make sure you rename "dummy_env" --> ".env" ***
+
 Once this has completed, run Docker and then in the VScode terminal you had open earlier please run 
 ```powershell
 docker-compose up
 ```
 You should see new entries in the docker window. 
 
-Now as long as everything is running fine, login to phpMyAdmin and add the contents of *sd2-db.sql* to the SQL tab and confirm changes.
+Now as long as everything is running fine, login to phpMyAdmin and add the contents of *dummy_data.sql* to the SQL tab and confirm changes.
 
 Everything should now be set up.
 
