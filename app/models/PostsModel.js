@@ -14,9 +14,13 @@ class PostModel {
     }
 
     async getPostById(id) {
-        const sql = `SELECT * FROM posts WHERE id = ${parseInt(id)}`;
-        const rows = await this.db.query(sql);
-        return rows[0];
+      const parsedId = parseInt(id);
+      if (!Number.isInteger(parsedId)) {
+        return null
+      }
+      const sql = `SELECT * FROM posts WHERE id = ${parsedId}`;
+      const rows = await this.db.query(sql);
+      return rows[0];
     }
 
     async getPostByCategory(category_id) {
