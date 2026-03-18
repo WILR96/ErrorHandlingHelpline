@@ -13,6 +13,8 @@ html(lang="en")
         nav
           ul
             li
+              a(class=active === "home" ? "active" : "", href="/") Home
+            li
               a(class=active === "archives" ? "active" : "", href="/archives") Archives
             li
               a(class=active === "leaderboards" ? "active" : "", href="/leaderboards") Leaderboards
@@ -21,7 +23,7 @@ html(lang="en")
             li
               a(class=active === "login" ? "active" : "", href="/login") Login
             li
-              a(class=active === "Users" ? "active" : "", href="/users") Users
+              a(class=active === "users" ? "active" : "", href="/users") Users
 
       main.content
         block content
