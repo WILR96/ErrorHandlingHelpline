@@ -62,6 +62,8 @@ app.post('/sign-up', UsersController.signupUser);
 app.get('/login', UsersController.showLogin);
 app.post('/login', UsersController.loginUser);
 
+app.get('/logout', UsersController.logout)
+
 
 // Start server on port 3000
 app.listen(3000, function() {

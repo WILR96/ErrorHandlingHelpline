@@ -38,6 +38,12 @@ async function showUserProfile(req, res) {
     });
 }
 
+function logout(req, res) {
+    //remove the user from session
+    delete req.session.user;
+    res.redirect('/');
+}
+
 async function signupUser(req, res) {
     //extract user signup form fields from req.body
     const {
@@ -99,5 +105,6 @@ module.exports = {
     signupUser,
     loginUser,
     showLogin,
-    showSignupForm
+    showSignupForm,
+    logout
 };
