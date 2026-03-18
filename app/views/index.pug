@@ -14,7 +14,7 @@ block content
     h2 Latest Posts
 
     if !posts || posts.length === 0
-      p No posts yet... suspiciously error-free.
+      p No posts yet... Go ahead, post away!
     else
       .posts
         each post in posts
@@ -23,3 +23,12 @@ block content
             h3
               a(href=`/posts/${post.id}`)= post.title
             p= preview
+
+            if post.comments && post.comments.length > 0
+              .comments
+                h4 Comments
+                each comment in post.comments
+                  .comment
+                  p= comment.content
+            else
+              p No comments.. Share your thoughts!
