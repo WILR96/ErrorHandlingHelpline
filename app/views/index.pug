@@ -10,6 +10,10 @@ block content
     else
       a.button(href="/sign-up") Get Started - Sign up Today!
 
+  section.create-post
+    if user
+      a.button(href="/posts/new") Create Post
+
   section.posts-preview
     h2 Latest Posts
 

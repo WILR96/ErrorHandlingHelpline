@@ -90,9 +90,65 @@ async function showSinglePost(req, res) {
     }
 }
 
+async function showCreatePost(req, res) {
+    res.render('create-post', {
+        active: "posts"
+    });
+}
+
+async function createPost(req, res) {
+    try {
+        const {
+            title,
+            content
+        } = req.body;
+        const user_id = req.session.user.id;
+
+        if (!title || !content) {
+            return res.render('create-post', {
+                error: "All fields are required",
+                active: "posts"
+            });
+        }
+
+        await postModel.createPost(title, content, user_id);
+
+        res.redirect('/posts');
+
+    } catch (err) {
+        console.error(err);
+
+        res.render('create-post', {
+            error: "Failed to create post",
+            active: "posts"
+        });
+    }
+}
+
+async function createComment(req, res) {
+    try {
+        const postId = req.params.id;
+        const {
+            content
+        } = req.body;
+        const userId = req.session.user.id;
+        await postModel.createComment(postId, userId, content);
+        res.redirect(`/posts/${postId}`);
+
+    } catch (err) {
+        console.error(err);
+        res.render(`/posts/${req.params.id}`, {error: "Something went wrong"});
+    }
+}
+
+
+
 //functions we will export.
 module.exports = {
     showHome,
     showPosts,
-    showSinglePost
+    showSinglePost,
+    showCreatePost,
+    createPost,
+    createComment
 };

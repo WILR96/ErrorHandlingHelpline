@@ -57,6 +57,9 @@ function requireGuest(req, res, next) {
 //Routes
 app.get('/', PostsController.showHome);
 app.get('/posts', PostsController.showPosts);
+app.get('/posts/new', requireLogin, PostsController.showCreatePost);
+app.post('/posts/new', requireLogin, PostsController.createPost);
+app.post('/posts/:id/reply', requireLogin, PostsController.createComment);
 app.get('/posts/:id', PostsController.showSinglePost);
 
 

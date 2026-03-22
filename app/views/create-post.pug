@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 Create a New Post
+
+  if error
+    p.error= error
+
+  form(method="POST", action="/posts/new")
+    div
+      label(for="title") Title
+      input(type="text", name="title", required)
+
+    div
+      label(for="content") Content
+      textarea(name="content", rows="6", required)
+
+    button(type="submit") Create Post

@@ -22,3 +22,18 @@ block content
     else
         p No comments yet... be the first!
   
+  if user
+    .reply-box
+      h3 Add a Reply
+
+      if error
+        p.error= error
+
+      form(method="POST", action=`/posts/${post.id}/reply`)
+        textarea(name="content", rows="4", placeholder="Write your reply...", required)
+        br
+        button(type="submit") Reply
+  else
+    p
+      a(href="/login") Log in
+      |  to reply
