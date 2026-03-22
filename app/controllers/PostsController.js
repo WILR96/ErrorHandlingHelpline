@@ -12,7 +12,7 @@ async function showHome(req, res) {
         //Get posts
         const posts = await postModel.getRecentPosts();
 
-        for (let post of posts){
+        for (let post of posts) {
             post.comments = await postModel.getCommentsByPostId(post.id)
         }
 
@@ -63,14 +63,17 @@ async function showSinglePost(req, res) {
         //use the postmodel method to get the post 
         const post = await postModel.getPostById(postId);
         //if there is no post for that id then we notify the user with an error text
-        if (post == null) {
+        if (!post) {
             return res.status(404).render('single-post', {
                 error: "Post not found",
                 post: null,
                 active: "posts"
             });
         }
+        //get comments
+        post.comments = await postModel.getCommentsByPostId(postId);
         //if we have posts then we can display the page normally
+
         res.render('single-post', {
             post,
             active: "posts"

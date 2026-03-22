@@ -1,9 +1,24 @@
 extends layout
+
 block content
   if error
     .error
       p= error
-  else if post
+
+  if post
     h1= post.title
     p Posted on #{post.created_at}
     p= post.content
+
+    if post.comments && post.comments.length > 0
+        .comments
+            h3 Comments (#{post.comments.length})
+            each comment in post.comments
+                .comment
+                    p
+                        strong
+                            a(href=`/users/${comment.user_id}`)= `${comment.username} (${comment.reputation} REP)`
+                        | : #{comment.content}
+    else
+        p No comments yet... be the first!
+  

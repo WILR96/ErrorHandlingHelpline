@@ -26,9 +26,13 @@ block content
 
             if post.comments && post.comments.length > 0
               .comments
-                h4 Comments
+                h4 Comments (#{post.comments.length})
                 each comment in post.comments
                   .comment
-                  p= comment.content
+                    p 
+                      strong 
+                        a(href=`/users/${comment.user_id}`)= `${comment.username} (${comment.reputation})`
+                      br
+                      | #{comment.content}
             else
               p No comments.. Share your thoughts!

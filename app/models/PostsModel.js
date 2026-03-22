@@ -14,13 +14,13 @@ class PostModel {
     }
 
     async getPostById(id) {
-      const parsedId = parseInt(id);
-      if (!Number.isInteger(parsedId)) {
-        return null
-      }
-      const sql = `SELECT * FROM posts WHERE id = ${parsedId}`;
-      const rows = await this.db.query(sql);
-      return rows[0];
+        const parsedId = parseInt(id);
+        if (!Number.isInteger(parsedId)) {
+            return null
+        }
+        const sql = `SELECT * FROM posts WHERE id = ${parsedId}`;
+        const rows = await this.db.query(sql);
+        return rows[0];
     }
 
     async getPostByCategory(category_id) {
@@ -33,10 +33,16 @@ class PostModel {
         return await this.db.query(sql);
     }
 
-    async getCommentsByPostId(post_id){
-      const sql = `SELECT * FROM responses WHERE post_id = ${parseInt(post_id)}`
-      const rows = await this.db.query(sql);
-      return rows
+    async getCommentsByPostId(post_id) {
+        const sql = `SELECT responses.*, users.username, users.reputation 
+        FROM responses 
+        JOIN users ON responses.user_id = users.id 
+        WHERE responses.post_id = 1 
+        ORDER BY responses.created_at ASC;`;
+        const rows = await this.db.query(sql, [post_id]);
+        return rows;
+    }
+
     }
 
 }
