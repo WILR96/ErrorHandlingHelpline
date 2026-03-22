@@ -47,6 +47,13 @@ function requireLogin(req, res, next) {
     next();
 }
 
+function requireGuest(req, res, next) {
+    if (req.session.user) {
+        return res.redirect('/'); // already logged in → go home
+    }
+    next();
+}
+
 //Routes
 app.get('/', PostsController.showHome);
 app.get('/posts', PostsController.showPosts);
@@ -56,13 +63,13 @@ app.get('/posts/:id', PostsController.showSinglePost);
 app.get('/users', requireLogin, UsersController.listUsers);
 app.get('/users/:id', requireLogin, UsersController.showUserProfile);
 
-app.get('/sign-up', UsersController.showSignupForm);
-app.post('/sign-up', UsersController.signupUser);
+app.get('/sign-up', requireGuest, UsersController.showSignupForm);
+app.post('/sign-up', requireGuest, UsersController.signupUser);
 
-app.get('/login', UsersController.showLogin);
-app.post('/login', UsersController.loginUser);
+app.get('/login', requireGuest, UsersController.showLogin);
+app.post('/login', requireGuest, UsersController.loginUser);
 
-app.get('/logout', UsersController.logout)
+app.get('/logout', requireLogin, UsersController.logout)
 
 
 // Start server on port 3000
