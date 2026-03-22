@@ -37,7 +37,7 @@ class PostModel {
         const sql = `SELECT responses.*, users.username, users.reputation 
         FROM responses 
         JOIN users ON responses.user_id = users.id 
-        WHERE responses.post_id = 1 
+        WHERE responses.post_id = ? 
         ORDER BY responses.created_at ASC;`;
         const rows = await this.db.query(sql, [post_id]);
         return rows;
