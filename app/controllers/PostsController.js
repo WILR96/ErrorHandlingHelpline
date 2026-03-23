@@ -39,18 +39,34 @@ async function showHome(req, res) {
 //gets all posts from the db, then renders the posts page with the results if there are any.
 async function showPosts(req, res) {
     try {
-        //get all posts using the postmodel
-        const posts = await postModel.getAllPosts();
+        const categoryId = req.query.category;
+
+        let posts;
+        
+        if (categoryId) { //if we have been supplied with a category, then we will get those posts.
+            posts = await postModel.getPostByCategory(categoryId)
+        } else {    //get all posts using the postmodel
+            posts = await postModel.getAllPosts()
+        }
+        
+        //get the list of categories
+        const categories = await postModel.getAllCategories()
+
+        
+        
         //render the posts page with the returned posts
         res.render('posts', {
             posts,
-            active: "posts"
+            active: "posts",
+            selectedCategory: categoryId,
+            categories: categories
         });
         //if there are no posts, then we will display the page without them.
     } catch (err) {
         console.error(err);
         res.render('posts', {
             posts: [],
+            categories: [],
             active: "posts"
         });
     }

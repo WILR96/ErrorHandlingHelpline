@@ -62,6 +62,11 @@ class PostModel {
         return await this.db.query(sql, [post_id, user_id, content]);
     }
 
+    async getAllCategories() {
+      const sql = 'SELECT * FROM categories';
+      return await this.db.query(sql);
+    }
+
 }
 
 module.exports = PostModel;

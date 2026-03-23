@@ -2,7 +2,16 @@ extends layout
 
 block content
   h1 Posts
-
+  
+  form(method="GET", action="/posts")
+    select(name="category", onchange="this.form.submit()")
+      option(value="") All Categories
+      each category in categories
+        option(
+          value=category.id 
+          selected=(selectedCategory == category.id)
+        )= category.name
+        
   ul
     each post in posts
       li
