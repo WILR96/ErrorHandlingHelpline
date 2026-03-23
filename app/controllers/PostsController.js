@@ -56,6 +56,26 @@ async function showPosts(req, res) {
     }
 }
 
+//gets all posts from the db, then renders the posts page with the results if there are any.
+async function showPostsByOldest(req, res) {
+    try {
+        //get all posts using the postmodel
+        const posts = await postModel.getAllPostsByOldest();
+        //render the posts page with the returned posts
+        res.render('archives', {
+            posts,
+            active: "archives"
+        });
+        //if there are no posts, then we will display the page without them.
+    } catch (err) {
+        console.error(err);
+        res.render('archives', {
+            posts: [],
+            active: "archives"
+        });
+    }
+}
+
 async function showSinglePost(req, res) {
     try {
         //get the id param from the request
@@ -148,6 +168,7 @@ module.exports = {
     showHome,
     showPosts,
     showSinglePost,
+    showPostsByOldest,
     showCreatePost,
     createPost,
     createComment

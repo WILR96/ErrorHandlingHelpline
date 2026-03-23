@@ -43,6 +43,11 @@ class PostModel {
         return rows;
     }
 
+    async getAllPostsByOldest() {
+        const sql = 'SELECT * FROM posts ORDER BY created_at ASC';
+        return await this.db.query(sql);
+    }
+
     async createPost(title, content, user_id) {
         const sql = `
         INSERT INTO posts (title, content, user_id, created_at)

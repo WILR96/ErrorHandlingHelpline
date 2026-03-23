@@ -63,7 +63,11 @@ app.post('/posts/:id/reply', requireLogin, PostsController.createComment);
 app.get('/posts/:id', PostsController.showSinglePost);
 
 
-app.get('/users', requireLogin, UsersController.listUsers);
+
+app.get('/archives', PostsController.showPostsByOldest);
+
+
+app.get('/leaderboards', requireLogin, UsersController.listUsers);
 app.get('/users/:id', requireLogin, UsersController.showUserProfile);
 
 app.get('/sign-up', requireGuest, UsersController.showSignupForm);

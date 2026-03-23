@@ -15,15 +15,14 @@ html(lang="en")
             li
               a(class=active === "home" ? "active" : "", href="/") Home
             li
-              a(class=active === "archives" ? "active" : "", href="/archives") Archives
+              a(class=active === "posts" ? "active" : "", href="/posts") Posts
             li
               a(class=active === "leaderboards" ? "active" : "", href="/leaderboards") Leaderboards
             li
-              a(class=active === "posts" ? "active" : "", href="/posts") Posts
-            li
-              a(class=active === "login" ? "active" : "", href="/login") Login
-            li
-              a(class=active === "users" ? "active" : "", href="/users") Users
+              a(class=active === "archives" ? "active" : "", href="/archives") Archives
+            if !user   
+              li
+                a(class=active === "login" ? "active" : "", href="/login") Login
 
       main.content
         block content
