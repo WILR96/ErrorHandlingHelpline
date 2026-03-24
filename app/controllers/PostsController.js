@@ -17,10 +17,7 @@ async function showHome(req, res) {
         }
 
         //Render the index pug with the response from the postmodel method ( also set active flag to home)
-        res.render('index', {
-            posts,
-            active: "home"
-        });
+        res.render('index', {posts, active: "home"});
 
         //Catch any error 
     } catch (err) {
@@ -29,10 +26,7 @@ async function showHome(req, res) {
         console.error(err);
 
         //also render the page with no posts supplied
-        res.render('index', {
-            posts: [],
-            active: "home"
-        });
+        res.render('index', {posts: [], active: "home"});
     }
 }
 
@@ -42,33 +36,26 @@ async function showPosts(req, res) {
         const categoryId = req.query.category;
 
         let posts;
-        
-        if (categoryId) { //if we have been supplied with a category, then we will get those posts.
+
+        //if we have been supplied with a category, then we will get those posts.
+        if (categoryId) { 
             posts = await postModel.getPostByCategory(categoryId)
-        } else {    //get all posts using the postmodel
+
+        //else get all posts using the postmodel    
+        } else {    
             posts = await postModel.getAllPosts()
         }
         
         //get the list of categories
         const categories = await postModel.getAllCategories()
-
-        
         
         //render the posts page with the returned posts
-        res.render('posts', {
-            posts,
-            active: "posts",
-            selectedCategory: categoryId,
-            categories: categories
-        });
+        res.render('posts', {posts, active: "posts", selectedCategory: categoryId, categories: categories});
+
         //if there are no posts, then we will display the page without them.
     } catch (err) {
         console.error(err);
-        res.render('posts', {
-            posts: [],
-            categories: [],
-            active: "posts"
-        });
+        res.render('posts', {posts: [], categories: [], active: "posts"});
     }
 }
 
@@ -78,17 +65,11 @@ async function showPostsByOldest(req, res) {
         //get all posts using the postmodel
         const posts = await postModel.getAllPostsByOldest();
         //render the posts page with the returned posts
-        res.render('archives', {
-            posts,
-            active: "archives"
-        });
+        res.render('archives', {posts, active: "archives"});
         //if there are no posts, then we will display the page without them.
     } catch (err) {
         console.error(err);
-        res.render('archives', {
-            posts: [],
-            active: "archives"
-        });
+        res.render('archives', {posts: [], active: "archives"});
     }
 }
 
@@ -96,68 +77,63 @@ async function showSinglePost(req, res) {
     try {
         //get the id param from the request
         const postId = req.params.id;
+
         //use the postmodel method to get the post 
         const post = await postModel.getPostById(postId);
+
         //if there is no post for that id then we notify the user with an error text
         if (!post) {
-            return res.status(404).render('single-post', {
-                error: "Post not found",
-                post: null,
-                active: "posts"
-            });
+            return res.render('single-post', {error: "Post not found", post: null, active: "posts"});
         }
         //get comments
         post.comments = await postModel.getCommentsByPostId(postId);
-        //if we have posts then we can display the page normally
 
-        res.render('single-post', {
-            post,
-            active: "posts"
-        });
+        //if we have posts then we can display the page normally
+        res.render('single-post', { post, active: "posts"});
+
         //catch any errors and gracefully handle, notify the user. Output to console.
     } catch (err) {
         console.error("Error loading post:", err);
 
-        res.status(500).render('single-post', {
-            error: "Something went wrong. Please try again later.",
-            post: null,
-            active: "posts"
-        });
+        res.render('single-post', {error: "Something went wrong. Please try again later.", post: null, active: "posts"});
     }
 }
 
 async function showCreatePost(req, res) {
-    res.render('create-post', {
-        active: "posts"
-    });
+    try {
+        //get categories using the postmodel method 
+        const categories = await postModel.getAllCategories();
+        //render the page with the categories supplied to the pug template
+        res.render('create-Post', {categories: categories, error: null});
+    
+    //catch any errors and supply a error message that can be displayed to the pug template
+    } catch (err) {console.error(err);
+        res.render('create-Post', {categories: [], error: "Failed to load categories"});
+    }
 }
 
 async function createPost(req, res) {
     try {
-        const {
-            title,
-            content
-        } = req.body;
+        const { title, content, category_id } = req.body;
         const user_id = req.session.user.id;
 
-        if (!title || !content) {
-            return res.render('create-post', {
-                error: "All fields are required",
-                active: "posts"
-            });
+        // validation
+        if (!title || !content || !category_id) {
+            const categories = await postModel.getAllCategories();
+            return res.render('create-post', { error: "All fields are required", categories: categories, active: "posts"});
         }
 
-        await postModel.createPost(title, content, user_id);
+        // pass category into model
+        await postModel.createPost(title, content, user_id, category_id);
 
         res.redirect('/posts');
 
     } catch (err) {
         console.error(err);
 
-        res.render('create-post', {
-            error: "Failed to create post",
-            active: "posts"
-        });
+        const categories = await postModel.getAllCategories();
+
+        res.render('create-post', {error: "Failed to create post", categories: categories, active: "posts"});
     }
 }
 

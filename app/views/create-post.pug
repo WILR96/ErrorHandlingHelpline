@@ -15,4 +15,11 @@ block content
       label(for="content") Content
       textarea(name="content", rows="6", required)
 
+    div
+      label(for="category") Category
+      select(name="category_id", required)
+        option(value="") -- Select a category --
+        each category in categories
+          option(value=category.id)= category.name
+
     button(type="submit") Create Post

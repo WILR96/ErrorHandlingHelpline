@@ -48,11 +48,10 @@ class PostModel {
         return await this.db.query(sql);
     }
 
-    async createPost(title, content, user_id) {
-        const sql = `
-        INSERT INTO posts (title, content, user_id, created_at)
-        VALUES (?, ?, ?, NOW())`;
-        return await this.db.query(sql, [title, content, user_id]);
+    async createPost(title, content, user_id, category_id) {
+        const sql = `INSERT INTO posts (title, content, user_id, category_id, created_at) 
+        VALUES (?, ?, ?, ?, NOW())`;
+    return await this.db.query(sql, [title, content, user_id, category_id]);
     }
 
     async createComment(post_id, user_id, content) {
