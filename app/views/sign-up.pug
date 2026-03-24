@@ -9,18 +9,19 @@ block content
   form(method="POST" action="/sign-up")
 
     div
-      label Username
-      input(type="text" name="username" required)
+      .input
+        input(type="text" name="username" placeholder="Username" required)
 
     div
-      label Email
-      input(type="email" name="email" required)
+      .input
+        input(type="email" name="email" placeholder="Email" required)
 
     div
-      label Password
-      input(type="password" name="password" required)
+      .input
+        input(type="password" name="password" placeholder="Password" required)
 
-    button(type="submit") Create Account
+    .button
+      button(type="submit") Create Account
 
   p
     | Already have an account?
