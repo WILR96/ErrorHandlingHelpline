@@ -200,6 +200,16 @@ input::placeholder {
   margin-bottom: 0.5rem;
 }
 
+.post-card h3 a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.post-card h3 a:hover {
+  color: #333333;
+  text-decoration: underline;
+}
+
 .read-more {
   display: inline-block;
   margin-top: 0.8rem;
