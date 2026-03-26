@@ -266,6 +266,16 @@ input::placeholder {
   color: #0ea5e9;
 }
 
+ul li a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+ul li a:hover {
+  color: #e2e8f0;
+  text-decoration: underline;
+}
+
 /* Navbar/Header */
 .navbar {
   background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
