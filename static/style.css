@@ -201,22 +201,22 @@ input::placeholder {
 }
 
 .post-card h3 a {
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
 }
 
 .post-card h3 a:hover {
-  color: #333333;
+  color: #e2e8f0;
   text-decoration: underline;
 }
 
 .comment strong a {
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
 }
 
 .comment strong a:hover {
-  color: #333333;
+  color: #e2e8f0;
   text-decoration: underline;
 }
 
