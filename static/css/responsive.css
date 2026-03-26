@@ -1,0 +1,488 @@
+/* ============ Responsive Design ============ */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-grid.form-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  body {
+    font-size: 1rem;
+  }
+
+  .container {
+    max-width: 720px;
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .form-grid.form-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Typography adjustments */
+  h1 {
+    font-size: var(--text-4xl);
+  }
+
+  h2 {
+    font-size: var(--text-3xl);
+  }
+
+  /* Navbar adjustments */
+  .navbar-menu {
+    gap: var(--space-lg);
+  }
+
+  /* Sidebar adjustments */
+  .sidebar {
+    width: auto;
+    border-right: 1px solid var(--border-primary);
+  }
+
+  /* Layout adjustments */
+  .layout {
+    flex-direction: row;
+  }
+
+  .layout-sidebar {
+    display: block;
+    width: 260px;
+  }
+
+  .layout-content {
+    flex: 1;
+  }
+
+  /* Page styling */
+  .page-actions {
+    flex-direction: row;
+  }
+
+  /* Grid utilities */
+  .hide-sm {
+    display: none;
+  }
+
+  .show-sm {
+    display: block !important;
+  }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 960px;
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .grid-cols-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .grid-cols-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  /* Content layout */
+  .two-col {
+    grid-template-columns: 1fr 320px;
+  }
+
+  .two-col-reverse {
+    grid-template-columns: 320px 1fr;
+  }
+
+  .content-sidebar {
+    width: 320px;
+  }
+
+  /* Hide mobile elements */
+  .hide-md {
+    display: none;
+  }
+
+  .show-md {
+    display: block !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1280px and up) */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1200px;
+  }
+
+  .container-xl {
+    max-width: 1280px;
+  }
+
+  .grid-cols-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .grid-cols-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .hide-lg {
+    display: none;
+  }
+
+  .show-lg {
+    display: block !important;
+  }
+}
+
+/* Ultra-wide devices (2K+, 1536px and up) */
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .hide-xl {
+    display: none;
+  }
+
+  .show-xl {
+    display: block !important;
+  }
+}
+
+/* ============ Mobile First Adjustments ============ */
+
+/* Extra small (mobile phones, less than 576px) */
+@media (max-width: 575.98px) {
+  body {
+    font-size: 0.95rem;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: var(--text-3xl);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+  }
+
+  /* Spacing */
+  .container {
+    padding: 0 var(--space-lg);
+  }
+
+  /* Forms */
+  .form-grid,
+  .form-grid.form-grid-2,
+  .form-grid.form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Grid */
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4,
+  .grid-cols-5,
+  .grid-cols-6 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Navbar */
+  .navbar-menu {
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .navbar-link {
+    font-size: var(--text-sm);
+  }
+
+  /* Layout */
+  .layout {
+    flex-direction: column;
+  }
+
+  .layout-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-primary);
+    position: fixed;
+    left: -100%;
+    top: 60px;
+    height: calc(100vh - 60px);
+    z-index: var(--z-modal);
+    transition: left 0.3s ease;
+  }
+
+  .layout-sidebar.open {
+    left: 0;
+  }
+
+  .layout-content {
+    flex: 1;
+  }
+
+  /* Page actions */
+  .page-actions {
+    flex-direction: column;
+  }
+
+  .page-actions .btn {
+    width: 100%;
+  }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  /* Modals */
+  .modal {
+    margin: var(--space-lg);
+    max-height: 90vh;
+  }
+
+  /* Tables */
+  table {
+    font-size: var(--text-sm);
+  }
+
+  th, td {
+    padding: var(--space-sm);
+  }
+
+  /* Two column layout */
+  .two-col,
+  .two-col-reverse {
+    grid-template-columns: 1fr;
+  }
+
+  .content-sidebar {
+    width: 100%;
+  }
+
+  /* Text utilities */
+  .text-hide {
+    display: none;
+  }
+}
+
+/* ============ Landscape Mode (Mobile) ============ */
+
+@media (max-width: 991.98px) and (orientation: landscape) {
+  body {
+    font-size: 0.9rem;
+  }
+
+  .layout-sidebar {
+    position: fixed;
+    left: -100%;
+    width: 250px;
+  }
+
+  .layout-sidebar.open {
+    left: 0;
+  }
+
+  .layout-content {
+    margin-left: 0;
+  }
+
+  .sidebar {
+    min-height: auto;
+  }
+
+  /* Reduce vertical spacing */
+  .p-xl, .m-xl {
+    padding: var(--space-lg);
+    margin: var(--space-lg);
+  }
+}
+
+/* ============ Print Styles ============ */
+
+@media print {
+  body {
+    background-color: white;
+    color: black;
+  }
+
+  .navbar,
+  .sidebar,
+  .layout-footer,
+  .print-hide {
+    display: none !important;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  a {
+    color: black;
+  }
+
+  .btn {
+    border: 1px solid black;
+  }
+}
+
+/* ============ High Contrast Mode ============ */
+
+@media (prefers-contrast: more) {
+  :root {
+    --border-primary: #606060;
+    --text-muted: #808080;
+  }
+
+  .btn {
+    border-width: 2px;
+  }
+}
+
+/* ============ Reduced Motion Animation ============ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============ Dark Mode Optional Enhancements ============ */
+
+@media (prefers-color-scheme: dark) {
+  /* Already dark by default, these are optional refinements */
+  :root {
+    --bg-primary: #0a0f1a;
+    --bg-secondary: #1a2332;
+  }
+}
+
+/* ============ Light Mode Support ============ */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f0f4f8;
+    --bg-tertiary: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border-primary: #cbd5e1;
+    --border-secondary: #e2e8f0;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .navbar {
+    background: linear-gradient(90deg, rgba(248, 250, 252, 0.95) 0%, rgba(240, 244, 248, 0.95) 100%);
+    border-bottom-color: var(--border-primary);
+  }
+
+  .card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+  }
+
+  .sidebar {
+    background-color: var(--bg-secondary);
+    border-right-color: var(--border-primary);
+  }
+
+  .btn-secondary,
+  .pill {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-primary);
+  }
+
+  input,
+  textarea,
+  select {
+    background-color: white;
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+  }
+
+  .navbar-link,
+  .sidebar-link {
+    color: var(--text-secondary);
+  }
+
+  .navbar-link:hover,
+  .navbar-link.active,
+  .sidebar-link:hover {
+    color: var(--primary);
+  }
+}
+
+/* ============ Touch Device Optimizations ============ */
+
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    padding: var(--space-lg) var(--space-xl);
+    min-height: 44px;
+  }
+
+  .btn-icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    padding: var(--space-lg);
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  .navbar-link,
+  .sidebar-link {
+    padding: var(--space-md) 0;
+  }
+}
+
+/* ============ Focus Visible Styles ============ */
+
+@media (prefers-reduced-motion: no-preference) {
+  :focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+  }
+}
