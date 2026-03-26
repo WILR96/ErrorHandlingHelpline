@@ -64,10 +64,10 @@ INSERT INTO categories (name) VALUES
 ('MySQL'),
 ('JavaScript');
 INSERT INTO users (username, email, password_hash, reputation) VALUES
-('segfault_sam', 'sam@example.com', 'hashed_pw', 120),
-('docker_dave', 'dave@example.com', 'hashed_pw', 80),
-('nullpointer_nina', 'nina@example.com', 'hashed_pw', 200),
-('panic_paul', 'paul@example.com', 'hashed_pw', 15);
+('segfault_sam', 'sam@example.com', '$2b$10$LkOBKhyiz3euAQoGdWsTYetXDV5YWNuKB8t4GcSSXeZ4h5g8l/h/K', 120),
+('docker_dave', 'dave@example.com', '$2b$10$0OSIOrt241SAI7wWfQjBcuLb026GMAXx3HegR.J.qfbws9qtrfBe6', 80),
+('nullpointer_nina', 'nina@example.com', '$2b$10$6zMMsIh4BsMG1NNbCLpKteTO10IKoUVH3.4yHSyKZaFTbNeneBUai', 200),
+('panic_paul', 'paul@example.com', '$2b$10$Q8xtb0l/yT56O3EyPZMueuxBrY33KSfSF2I7HDT8m17gjQwRQAjx2', 15);
 INSERT INTO posts (user_id, category_id, title, content, upvotes) VALUES
 (1, 1, 'Segmentation fault when using vectors',
  'My C++ program crashes when pushing into a vector. No idea why. Help.', 5),
