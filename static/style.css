@@ -210,6 +210,16 @@ input::placeholder {
   text-decoration: underline;
 }
 
+.comment strong a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.comment strong a:hover {
+  color: #333333;
+  text-decoration: underline;
+}
+
 .read-more {
   display: inline-block;
   margin-top: 0.8rem;
