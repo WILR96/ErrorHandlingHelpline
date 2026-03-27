@@ -1,5 +1,150 @@
 extends layout
+
 block content
-  h1= user.name
-  p Email: #{user.email}
-  p ID: #{user.id}
+  .breadcrumb
+    a(href="/") Home
+    span.breadcrumb-divider /
+    span.breadcrumb-item.active Profile
+
+  .profile-header
+    .profile-banner
+      .profile-banner-content
+        h1.profile-title= user.name || 'User Profile'
+        p.profile-subtitle= user.email
+
+  .container-sm
+    .profile-container
+      // Profile Card
+      .profile-card-main
+        .profile-avatar-large
+          = user.name.charAt(0).toUpperCase()
+        
+        .profile-info-section
+          h2.profile-name= user.name
+          p.profile-email= user.email
+          
+          if user.bio
+            p.profile-bio= user.bio
+          else
+            p.profile-bio.text-muted No bio added yet
+          
+          .profile-meta
+            .meta-item
+              span.meta-icon 🏆
+              span.meta-text Member since 
+                strong 2024
+            .meta-item
+              span.meta-icon 📍
+              span.meta-text Active contributor
+
+      // Stats Grid
+      .stats-grid
+        .stat-card
+          .stat-card-value= user.posts_count || 0
+          .stat-card-label Questions Asked
+          .stat-card-change ↑ Active contributor
+
+        .stat-card
+          .stat-card-value= user.answers_count || 0
+          .stat-card-label Answers Given
+          .stat-card-change ↑ Helpful responses
+
+        .stat-card
+          .stat-card-value= user.reputation || 100
+          .stat-card-label Reputation Score
+          .stat-card-change ↑ Points earned
+
+        .stat-card
+          .stat-card-value 5
+          .stat-card-label Solutions
+          .stat-card-change ↑ Problems solved
+
+      // User Badges Section
+      .badges-section
+        h3.section-title 🎖️ Badges & Achievements
+        .badges-grid
+          .achievement-badge
+            .badge-icon 🎯
+            .badge-name First Question
+            .badge-desc Asked first question
+
+          .achievement-badge
+            .badge-icon 💡
+            .badge-name Helpful
+            .badge-desc 10 helpful answers
+
+          .achievement-badge
+            .badge-icon ⭐
+            .badge-name Rising Star
+            .badge-desc 50 reputation
+
+          .achievement-badge
+            .badge-icon 🏅
+            .badge-name Expert
+            .badge-desc 500 reputation
+
+      // User's Recent Posts
+      .recent-posts-section
+        h3.section-title 📝 Recent Questions
+        
+        if user.recent_posts && user.recent_posts.length > 0
+          .posts-list
+            each post in user.recent_posts.slice(0, 5)
+              .question-card-compact
+                .question-card-compact-title= post.title || 'Question Title'
+                .question-card-compact-meta
+                  span.meta-badge
+                    = post.answers_count || 0
+                    |  answers
+                  span.meta-badge
+                    = post.views_count || 0
+                    |  views
+                a.read-more(href=`/post/${post.id}`) View Question →
+        else
+          .empty-state
+            .empty-state-icon 📭
+            .empty-state-title No questions yet
+            .empty-state-text This user hasn't asked any questions yet.
+
+      // User Activity Timeline
+      .activity-section
+        h3.section-title 📊 Activity Timeline
+        .timeline
+          .timeline-item
+            .timeline-content
+              .timeline-date Today
+              p Asked question: "How to fix Docker setup?"
+
+          .timeline-item
+            .timeline-content
+              .timeline-date Yesterday
+              p Answered a question in JavaScript
+
+          .timeline-item
+            .timeline-content
+              .timeline-date 2 days ago
+              p Joined the community
+
+      // About Section
+      .about-section
+        h3.section-title 👤 About
+        .about-card
+          h4 Skills & Interests
+          .tags
+            if user.skills
+              each skill in user.skills.split(',')
+                span.tag= skill.trim()
+            else
+              span.tag JavaScript
+              span.tag Node.js
+              span.tag React
+              span.tag CSS
+
+      // Action Buttons
+      .profile-actions
+        if is_owner
+          button.btn.btn-primary ✏️ Edit Profile
+          button.btn.btn-secondary 🔐 Privacy Settings
+        else
+          button.btn.btn-primary 💬 Send Message
+          button.btn.btn-secondary ⭐ Follow User
