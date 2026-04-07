@@ -42,6 +42,45 @@ select {
   transition: all var(--transition-base);
 }
 
+/* Alias for auth form styling */
+.form-input {
+  width: 100%;
+  padding: var(--space-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--text-base);
+  transition: all var(--transition-base);
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.form-hint {
+  display: block;
+  margin-top: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
 input[type="text"]::placeholder,
 input[type="email"]::placeholder,
 input[type="password"]::placeholder,

@@ -8,12 +8,90 @@ const usersModel = new UsersModel(require('../services/db'));
 
 //listusers func that handles the users route, gets all users from the related method
 async function listUsers(req, res) {
-    const users = await usersModel.getAllUsers();
-    res.render('users', {
-        users,
-        // active is a variable used by the layout pug to highlight the current page
-        active: "Users"
-    });
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const sortBy = req.query.sort || 'reputation';
+        const searchQuery = req.query.search || '';
+        const filter = req.query.filter || 'all';
+        const itemsPerPage = 12;
+
+        // Get all users
+        let users = await usersModel.getAllUsers();
+
+        // Filter based on activity or helpers  
+        if (filter === 'active') {
+            users = users.filter(u => u.isActive);
+        } else if (filter === 'helpers') {
+            users = users.sort((a, b) => (b.answer_count || 0) - (a.answer_count || 0));
+            users = users.slice(0, Math.ceil(users.length * 0.2)); // Top 20%
+        }
+
+        // Search functionality
+        if (searchQuery) {
+            users = users.filter(u => 
+                (u.username && u.username.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (u.email && u.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (u.name && u.name.toLowerCase().includes(searchQuery.toLowerCase()))
+            );
+        }
+
+        // Sort functionality
+        switch(sortBy) {
+            case 'posts':
+                users.sort((a, b) => (b.post_count || 0) - (a.post_count || 0));
+                break;
+            case 'recent':
+                users.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+                break;
+            case 'alpha':
+                users.sort((a, b) => (a.username || '').localeCompare(b.username || ''));
+                break;
+            case 'reputation':
+            default:
+                users.sort((a, b) => (b.reputation || 0) - (a.reputation || 0));
+        }
+
+        // Calculate pagination
+        const totalUsers = users.length;
+        const totalPages = Math.ceil(totalUsers / itemsPerPage);
+        const startIdx = (page - 1) * itemsPerPage;
+        const endIdx = startIdx + itemsPerPage;
+        const paginatedUsers = users.slice(startIdx, endIdx);
+
+        // Calculate stats
+        const activeCount = (await usersModel.getAllUsers()).filter(u => u.isActive).length;
+        const totalPosts = (await usersModel.getAllUsers()).reduce((sum, u) => sum + (u.post_count || 0), 0);
+        const totalAnswers = (await usersModel.getAllUsers()).reduce((sum, u) => sum + (u.answer_count || 0), 0);
+
+        res.render('users', {
+            users: paginatedUsers,
+            totalUsers,
+            totalPages,
+            currentPage: page,
+            sortBy,
+            searchQuery,
+            activeFilter: filter,
+            activeCount,
+            totalPosts,
+            totalAnswers,
+            active: "leaderboards"
+        });
+    } catch (error) {
+        console.error('Error in listUsers:', error);
+        res.render('users', {
+            users: [],
+            totalUsers: 0,
+            totalPages: 1,
+            currentPage: 1,
+            sortBy: 'reputation',
+            searchQuery: '',
+            activeFilter: 'all',
+            activeCount: 0,
+            totalPosts: 0,
+            totalAnswers: 0,
+            error: 'Error loading leaderboard'
+        });
+    }
 }
 
 //just render the sign-up page 
