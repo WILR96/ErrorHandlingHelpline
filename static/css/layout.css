@@ -101,6 +101,29 @@
 .flex-1 { flex: 1; }
 .flex-auto { flex: auto; }
 
+/* ============ App Layout ============ */
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app > .sidebar {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.app > .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.app > .footer {
+  grid-column: 1 / -1;
+}
+
 /* ============ Navigation Bar ============ */
 
 .navbar {
@@ -183,6 +206,47 @@
   position: sticky;
   top: 0;
   overflow-y: auto;
+}
+
+.sidebar .logo {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-extrabold);
+  margin-bottom: var(--space-xl);
+  color: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.sidebar nav li a {
+  display: flex;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  border-left: 4px solid transparent;
+  margin-left: -4px;
+}
+
+.sidebar nav li a:hover {
+  background-color: rgba(56, 189, 248, 0.1);
+  color: var(--primary);
+}
+
+.sidebar nav li a.active {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.2) 0%, transparent 100%);
+  color: var(--primary);
+  border-left-color: var(--primary);
 }
 
 .sidebar-brand {
@@ -362,6 +426,22 @@
 .content-sidebar {
   width: 320px;
   flex-shrink: 0;
+}
+
+/* ============ Footer ============ */
+
+.footer {
+  padding: var(--space-lg) var(--space-xl);
+  border-top: 1px solid var(--border-primary);
+  background-color: var(--bg-secondary);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  margin-top: auto;
+}
+
+.footer p {
+  margin: 0;
 }
 
 /* ============ Two Column Layout ============ */

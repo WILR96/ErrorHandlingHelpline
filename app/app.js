@@ -78,6 +78,34 @@ app.post('/login', requireGuest, UsersController.loginUser);
 
 app.get('/logout', requireLogin, UsersController.logout)
 
+// Legal pages
+app.get('/terms', (req, res) => {
+    res.render('terms', { active: 'terms' });
+});
+
+app.get('/privacy', (req, res) => {
+    res.render('privacy', { active: 'privacy' });
+});
+
+app.get('/forgot-password', (req, res) => {
+    res.render('forgot-password', { active: 'forgot-password' });
+});
+
+// OAuth routes (placeholder - to be implemented with actual OAuth providers)
+app.get('/auth/github', (req, res) => {
+    res.render('forgot-password', { 
+        error: 'GitHub OAuth integration coming soon!',
+        active: 'forgot-password'
+    });
+});
+
+app.get('/auth/google', (req, res) => {
+    res.render('forgot-password', { 
+        error: 'Google OAuth integration coming soon!',
+        active: 'forgot-password'
+    });
+});
+
 
 // Start server on port 3000
 app.listen(3000, function() {
