@@ -18,7 +18,7 @@ block content
     div
       label(for="category") Category
       select(name="category_id", required)
-        option(value="") -- Select a category --
+        option(value="") Select a category
         each category in categories
           option(value=category.id)= category.name
 
