@@ -27,6 +27,7 @@ class UsersModel {
             const answerCount = await this.db.query('SELECT COUNT(*) as count FROM responses WHERE user_id = ?', [user.id]);
             user.post_count = postCount[0].count;
             user.answer_count = answerCount[0].count;
+            user.isActive = true; // All users are considered active for now
             return user;
         }
         return null;
@@ -43,6 +44,39 @@ class UsersModel {
             [username, email, passwordHash]
         );
     }
+
+    async addRep(userId, points) {
+
+        // add reputation to user
+        await this.db.query(`UPDATE users SET reputation = reputation + ? WHERE id = ?`,[points, userId]);
+
+        // get the new rep value
+        const [rows] = await this.db.query(`SELECT reputation FROM users WHERE id = ?`,[userId]);
+        const rep = rows[0].reputation;
+
+        // update user title.. 
+        let title;
+
+        if (rep >= 1000) {
+            title = "Legendary Debugger";
+        } else if (rep >= 500) {
+            title = "Community Mentor";
+        } else if (rep >= 250) {
+            title = "Expert Helper";
+        } else if (rep >= 100) {
+            title = "Trusted Helper";
+        } else if (rep >= 50) {
+            title = "Active Contributor";
+        } else if (rep >= 10) {
+            title = "Contributor";
+        } else {
+            title = "New Member";
+        }
+
+        // Update title
+        await this.db.query(`UPDATE users SET title = ? WHERE id = ?`, [title, userId]);
+    }
+
 }
 
 module.exports = UsersModel;
