@@ -14,15 +14,12 @@ block content
 
   .container-sm
     .profile-container
-      // Profile Card
+      // Profile Card       //profile-avatar-large should be an image????
       .profile-card-main
-        .profile-avatar-large
-          = user.name.charAt(0).toUpperCase()
+        .profile-avatar-large 
+          = user.username.charAt(0).toUpperCase() 
         
         .profile-info-section
-          h2.profile-name= user.name
-          p.profile-email= user.email
-          
           if user.bio
             p.profile-bio= user.bio
           else
@@ -35,7 +32,7 @@ block content
                 strong 2024
             .meta-item
               span.meta-icon 📍
-              span.meta-text Active contributor
+              span.meta-text= user.title || 'NOOB'
 
       // Stats Grid
       .stats-grid
