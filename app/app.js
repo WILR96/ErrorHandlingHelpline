@@ -78,6 +78,9 @@ app.post('/login', requireGuest, UsersController.loginUser);
 
 app.get('/logout', requireLogin, UsersController.logout)
 
+app.post('/posts/reply/:id/upvote', requireLogin, PostsController.upvoteComment);
+app.post('/posts/reply/:id/downvote', requireLogin, PostsController.downvoteComment);
+
 // Legal pages
 app.get('/terms', (req, res) => {
     res.render('terms', { active: 'terms' });

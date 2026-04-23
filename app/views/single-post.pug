@@ -13,28 +13,38 @@ block content
     p= post.content
 
     if post.comments && post.comments.length > 0
-        .comments
-            h3 Comments (#{post.comments.length})
-            each comment in post.comments
-                .comment
-                    p
-                        strong
-                            a(href=`/users/${comment.user_id}`)= `${comment.username} (${comment.reputation} REP)`
-                        | : #{comment.content}
+      .comments
+        h3 Comments (#{post.comments.length})
+
+        each comment in post.comments
+          .comment
+            .comment-header
+              strong
+                a(href=`/users/${comment.user_id}`)
+                  = `${comment.username} (${comment.reputation} REP)`
+            //upvote / downvote
+            .comment-votes
+              form(method="POST", action=`/posts/reply/${comment.id}/upvote`, style="display:inline")
+                button(type="submit") 👍
+
+              span.score= comment.score
+
+              form(method="POST", action=`/posts/reply/${comment.id}/downvote`, style="display:inline")
+                button(type="submit") 👎
+
+            .comment-body
+              p= comment.content
     else
-        p No comments yet... be the first!
-  
+      p No comments yet... be the first!
   if user
     .reply-box
       h3 Add a Reply
-
-      if error
-        p.error= error
 
       form(method="POST", action=`/posts/${post.id}/reply`)
         textarea(name="content", rows="4", placeholder="Write your reply...", required)
         br
         button(type="submit") Reply
+
   else
     p
       a(href="/login") Log in

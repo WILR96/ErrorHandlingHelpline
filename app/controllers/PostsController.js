@@ -153,6 +153,34 @@ async function createComment(req, res) {
     }
 }
 
+async function upvoteComment(req, res) {
+    try {
+        const userId = req.session.user.id;
+        const commentId = req.params.id;
+
+        await postModel.voteResponse(userId, commentId, 1);
+
+        res.redirect('back');
+    } catch (err) {
+        console.error(err);
+        res.redirect('back');
+    }
+}
+
+async function downvoteComment(req, res) {
+    try {
+        const userId = req.session.user.id;
+        const commentId = req.params.id;
+
+        await postModel.voteResponse(userId, commentId, -1);
+
+        res.redirect('back');
+    } catch (err) {
+        console.error(err);
+        res.redirect('back');
+    }
+}
+
 
 
 //functions we will export.
@@ -163,5 +191,8 @@ module.exports = {
     showPostsByOldest,
     showCreatePost,
     createPost,
-    createComment
+    createComment,
+    upvoteComment,
+    downvoteComment
+
 };
