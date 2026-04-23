@@ -66,6 +66,14 @@ class PostModel {
       return await this.db.query(sql);
     }
 
+    async voteResponse(userId, responseId, value) {
+        const sql = `
+        INSERT INTO response_votes (user_id, response_id, value)
+        VALUES (?, ?, ?)
+        ON DUPLICATE KEY UPDATE value = VALUES(value)
+        `;
+        await this.db.query(sql, [userId, responseId, value]);
+}
 }
 
 module.exports = PostModel;
