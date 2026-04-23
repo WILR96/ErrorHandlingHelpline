@@ -84,9 +84,9 @@ block content
       .recent-posts-section
         h3.section-title 📝 Recent Questions
         
-        if user.recent_posts && user.recent_posts.length > 0
+        if user.postsByUser && user.postsByUser.length > 0
           .posts-list
-            each post in user.recent_posts.slice(0, 5)
+            each post in user.postsByUser.slice(0, 5)
               .question-card-compact
                 .question-card-compact-title= post.title || 'Question Title'
                 .question-card-compact-meta
@@ -96,7 +96,7 @@ block content
                   span.meta-badge
                     = post.views_count || 0
                     |  views
-                a.read-more(href=`/post/${post.id}`) View Question →
+                a.read-more(href=`/posts/${post.id}`) View Question →
         else
           .empty-state
             .empty-state-icon 📭

@@ -1,11 +1,12 @@
 //imports
 const UsersModel = require('../models/UserModel');
+const PostsModel = require('../models/PostsModel');
 //using bcrypt for password hashing
 const bcrypt = require('bcrypt');
 
 //instantiate UsersModel with database connection
 const usersModel = new UsersModel(require('../services/db'));
-
+const postsModel = new PostsModel(require('../services/db'));
 //listusers func that handles the users route, gets all users from the related method
 async function listUsers(req, res) {
     try {
@@ -111,6 +112,7 @@ async function showLogin(req, res) {
 //handles the /users/:id route, displays the requested users profile using the getUserById method
 async function showUserProfile(req, res) {
     const user = await usersModel.getUserById(req.params.id);
+    user.postsByUser = await postsModel.getPostByUser(req.params.id)
     res.render('userProfile', {
         user
     });
