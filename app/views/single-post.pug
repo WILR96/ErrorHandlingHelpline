@@ -7,7 +7,9 @@ block content
 
   if post
     h1= post.title
-    p Posted on #{post.created_at}
+    p
+      a(href=`/users/${post.user_id}`)= post.username
+      |  Posted on #{post.created_at}
     p= post.content
 
     if post.comments && post.comments.length > 0
