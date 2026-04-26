@@ -7,6 +7,16 @@ block content
 
   if post
     h1= post.title
+    - let solved = false
+
+    for comment in post.comments
+      if comment.is_accepted
+        - solved = true
+    if solved
+      h(style="color: green; font-size: 45px; font-weight: bold") SOLVED
+    else
+      h(style="color: red; font-size: 45px; font-weight: bold") NOT SOLVED
+      
     p
       a(href=`/users/${post.user_id}`)= post.username
       |  Posted on #{post.created_at}
