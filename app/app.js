@@ -71,6 +71,7 @@ app.post('/posts/:id/reply', requireLogin, postController.createComment.bind(pos
 app.get('/posts/:id', postController.showSinglePost.bind(postController));
 app.post('/posts/reply/:id/upvote', requireLogin, postController.upvoteComment.bind(postController));
 app.post('/posts/reply/:id/downvote', requireLogin, postController.downvoteComment.bind(postController));
+app.post('/posts/reply/:id/accept', requireLogin, postController.acceptResponse.bind(postController));
 
 app.get('/archives', postController.showPostsByOldest.bind(postController));
 

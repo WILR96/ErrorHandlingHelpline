@@ -129,6 +129,50 @@ class PostModel {
         `;
         await this.db.query(sql, [userId, responseId, value]);
 }
+    async acceptResponse(responseId, userId) {
+        // 1. get response + post owner
+        const rows = await this.db.query(`SELECT r.post_id, p.user_id AS post_owner FROM responses r JOIN posts p ON r.post_id = p.id WHERE r.id = ?`, [responseId]);
+
+        if (!rows.length) {
+            throw new Error("Response not found");
+        }
+        
+        const { post_id, post_owner } = rows[0];
+
+        // 2. only post owner can accept
+        if (parseInt(post_owner) !== userId) {
+            throw new Error("Not authorized");
+        }
+
+        // 3. check current state
+        const current = await this.db.query(
+            `SELECT is_accepted FROM responses WHERE id = ?`,
+            [responseId]
+        );
+
+        const isAccepted = current[0].is_accepted;
+
+        if (isAccepted) {
+            // toggle OFF
+            await this.db.query(
+                `UPDATE responses SET is_accepted = FALSE WHERE id = ?`,
+                [responseId]
+            );
+        } else {
+            // remove any existing accepted
+            await this.db.query(
+                
+                `UPDATE responses SET is_accepted = FALSE WHERE post_id = ?`,
+                [post_id]
+            );
+
+            // set new accepted
+            await this.db.query(
+                `UPDATE responses SET is_accepted = TRUE WHERE id = ?`,
+                [responseId]
+            );
+        }
+    }
 }
 
 module.exports = PostModel;

@@ -183,7 +183,20 @@ class PostsController {
         }
     }
 
+    async acceptResponse(req, res) {
+        try {
+            const responseId = req.params.id;
+            const userId = req.session.user.id;
 
+            await this.postsModel.acceptResponse(responseId, userId);
 
+            res.redirect('back');
+
+        } catch (err) {
+            console.error(err);
+            res.redirect('back');
+        }
+    }
+}
 
 module.exports = PostsController

@@ -32,6 +32,13 @@ block content
               form(method="POST", action=`/posts/reply/${comment.id}/downvote`, style="display:inline")
                 button(type="submit") 👎
 
+            if loggedInUsername && loggedInUsername == post.username
+              form(method="POST", action=`/posts/reply/${comment.id}/accept`, style="display:inline")
+                button(type="submit")
+                  if comment.is_accepted
+                    | Unaccept
+                  else
+                    | Mark as Solved
             .comment-body
               p= comment.content
     else
