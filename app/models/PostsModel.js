@@ -1,18 +1,14 @@
 class PostModel {
-    constructor(db) {
+    constructor(db, usersModel) {
         this.db = db;
+        this.usersModel = usersModel;
     }
 
     async getRecentPosts(limit = 5) {
         const safeLimit = parseInt(limit);
     
         const sql = `
-            SELECT posts.*, users.username,
-            (
-                SELECT COALESCE(SUM(value), 0)
-                FROM post_votes
-                WHERE post_votes.post_id = posts.id
-            ) AS upvotes
+            SELECT posts.*, users.username
             FROM posts
             JOIN users ON posts.user_id = users.id
             ORDER BY created_at DESC
@@ -24,12 +20,7 @@ class PostModel {
 
     async getAllPosts() {
         const sql = `
-        SELECT posts.*, users.username,
-        (
-            SELECT COALESCE(SUM(value), 0)
-            FROM post_votes
-            WHERE post_votes.post_id = posts.id
-        ) AS upvotes
+        SELECT posts.*, users.username
         FROM posts
         JOIN users ON posts.user_id = users.id
         ORDER BY created_at DESC
@@ -42,12 +33,7 @@ class PostModel {
         if (!Number.isInteger(parsedId)) return null;
 
         const sql = `
-        SELECT posts.*, users.username,
-        (
-            SELECT COALESCE(SUM(value), 0)
-            FROM post_votes
-            WHERE post_votes.post_id = posts.id
-        ) AS upvotes
+        SELECT posts.*, users.username
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE posts.id = ?
@@ -59,12 +45,7 @@ class PostModel {
 
     async getPostByCategory(category_id) {
         const sql = `
-        SELECT posts.*, users.username,
-        (
-            SELECT COALESCE(SUM(value), 0)
-            FROM post_votes
-            WHERE post_votes.post_id = posts.id
-        ) AS upvotes
+        SELECT posts.*, users.username
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE category_id = ?
@@ -75,12 +56,7 @@ class PostModel {
 
     async getPostByUser(user_id) {
         const sql = `
-        SELECT posts.*, users.username,
-        (
-            SELECT COALESCE(SUM(value), 0)
-            FROM post_votes
-            WHERE post_votes.post_id = posts.id
-        ) AS upvotes
+        SELECT posts.*, users.username
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE user_id = ?
@@ -108,12 +84,7 @@ class PostModel {
 
     async getAllPostsByOldest() {
         const sql = `
-        SELECT posts.*, users.username,
-        (
-            SELECT COALESCE(SUM(value), 0)
-            FROM post_votes
-            WHERE post_votes.post_id = posts.id
-        ) AS score
+        SELECT posts.*, users.username
         FROM posts
         JOIN users ON posts.user_id = users.id
         ORDER BY created_at ASC

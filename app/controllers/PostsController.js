@@ -1,198 +1,189 @@
-//Imports
-const PostModel = require('../models/PostsModel');
-const db = require('../services/db');
-
-//Create new postModel object
-const postModel = new PostModel(db);
-
-//showHome function that displays recent posts by calling the postmodels getRecentPosts method
-async function showHome(req, res) {
-
-    try {
-        //Get posts
-        const posts = await postModel.getRecentPosts();
-
-        for (let post of posts) {
-            post.comments = await postModel.getCommentsByPostId(post.id)
-        }
-
-        //Render the index pug with the response from the postmodel method ( also set active flag to home)
-        res.render('index', {posts, active: "home"});
-
-        //Catch any error 
-    } catch (err) {
-
-        //send it to the console
-        console.error(err);
-
-        //also render the page with no posts supplied
-        res.render('index', {posts: [], active: "home"});
+class PostsController {
+    constructor(usersModel, postsModel) {
+        this.usersModel = usersModel;
+        this.postsModel = postsModel;
     }
-}
 
-//gets all posts from the db, then renders the posts page with the results if there are any.
-async function showPosts(req, res) {
-    try {
-        const categoryId = req.query.category;
+    //showHome that displays recent posts by calling the this.postsmodels getRecentPosts method
+    async showHome(req, res) {
 
-        let posts;
+        try {
+            //Get posts
+            const posts = await this.postsModel.getRecentPosts();
 
-        //if we have been supplied with a category, then we will get those posts.
-        if (categoryId) { 
-            posts = await postModel.getPostByCategory(categoryId)
+            for (let post of posts) {
+                post.comments = await this.postsModel.getCommentsByPostId(post.id)
+            }
 
-        //else get all posts using the postmodel    
-        } else {    
-            posts = await postModel.getAllPosts()
+            //Render the index pug with the response from the this.postsmodel method ( also set active flag to home)
+            res.render('index', {posts, active: "home"});
+
+            //Catch any error 
+        } catch (err) {
+
+            //send it to the console
+            console.error(err);
+
+            //also render the page with no posts supplied
+            res.render('index', {posts: [], active: "home"});
         }
+    }
+
+    //gets all posts from the db, then renders the posts page with the results if there are any.
+    async showPosts(req, res) {
+        try {
+            const categoryId = req.query.category;
+
+            let posts;
+
+            //if we have been supplied with a category, then we will get those posts.
+            if (categoryId) { 
+                posts = await this.postsModel.getPostByCategory(categoryId)
+
+            //else get all posts using the this.postsmodel    
+            } else {    
+                posts = await this.postsModel.getAllPosts()
+            }
+
+            //get the list of categories
+            const categories = await this.postsModel.getAllCategories()
+
+            //render the posts page with the returned posts
+            res.render('posts', {posts, active: "posts", selectedCategory: categoryId, categories: categories});
+
+            //if there are no posts, then we will display the page without them.
+        } catch (err) {
+            console.error(err);
+            res.render('posts', {posts: [], categories: [], active: "posts"});
+        }
+    }
+
+    //gets all posts from the db, then renders the posts page with the results if there are any.
+    async showPostsByOldest(req, res) {
+        try {
+            //get all posts using the this.postsmodel
+            const posts = await this.postsModel.getAllPostsByOldest();
+            //render the posts page with the returned posts
+            res.render('archives', {posts, active: "archives"});
+            //if there are no posts, then we will display the page without them.
+        } catch (err) {
+            console.error(err);
+            res.render('archives', {posts: [], active: "archives"});
+        }
+    }
+
+    async showSinglePost(req, res) {
+        try {
+            //get the id param from the request
+            const postId = req.params.id;
+            if (req.session.user) {
+                var loggedInUsername = req.session.user.username;
+            }
+
+            //use the this.postsmodel method to get the post 
+            const post = await this.postsModel.getPostById(postId);
+
+            //if there is no post for that id then we notify the user with an error text
+            if (!post) {
+                return res.render('single-post', {error: "Post not found", post: null, active: "posts"});
+            }
+            //get comments
+            post.comments = await this.postsModel.getCommentsByPostId(postId);
+
+            //if we have posts then we can display the page normally
+            res.render('single-post', { post, loggedInUsername, active: "posts"});
+
+            //catch any errors and gracefully handle, notify the user. Output to console.
+        } catch (err) {
+            console.error("Error loading post:", err);
+
+            res.render('single-post', {error: "Something went wrong. Please try again later.", user: null, post: null, active: "posts"});
+        }
+    }
+
+    async showCreatePost(req, res) {
+        try {
+            //get categories using the this.postsmodel method 
+            const categories = await this.postsModel.getAllCategories();
+            //render the page with the categories supplied to the pug template
+            res.render('create-Post', {categories: categories, error: null});
         
-        //get the list of categories
-        const categories = await postModel.getAllCategories()
-        
-        //render the posts page with the returned posts
-        res.render('posts', {posts, active: "posts", selectedCategory: categoryId, categories: categories});
-
-        //if there are no posts, then we will display the page without them.
-    } catch (err) {
-        console.error(err);
-        res.render('posts', {posts: [], categories: [], active: "posts"});
-    }
-}
-
-//gets all posts from the db, then renders the posts page with the results if there are any.
-async function showPostsByOldest(req, res) {
-    try {
-        //get all posts using the postmodel
-        const posts = await postModel.getAllPostsByOldest();
-        //render the posts page with the returned posts
-        res.render('archives', {posts, active: "archives"});
-        //if there are no posts, then we will display the page without them.
-    } catch (err) {
-        console.error(err);
-        res.render('archives', {posts: [], active: "archives"});
-    }
-}
-
-async function showSinglePost(req, res) {
-    try {
-        //get the id param from the request
-        const postId = req.params.id;
-
-        //use the postmodel method to get the post 
-        const post = await postModel.getPostById(postId);
-
-        //if there is no post for that id then we notify the user with an error text
-        if (!post) {
-            return res.render('single-post', {error: "Post not found", post: null, active: "posts"});
+        //catch any errors and supply a error message that can be displayed to the pug template
+        } catch (err) {console.error(err);
+            res.render('create-Post', {categories: [], error: "Failed to load categories"});
         }
-        //get comments
-        post.comments = await postModel.getCommentsByPostId(postId);
-
-        //if we have posts then we can display the page normally
-        res.render('single-post', { post, active: "posts"});
-
-        //catch any errors and gracefully handle, notify the user. Output to console.
-    } catch (err) {
-        console.error("Error loading post:", err);
-
-        res.render('single-post', {error: "Something went wrong. Please try again later.", post: null, active: "posts"});
     }
-}
 
-async function showCreatePost(req, res) {
-    try {
-        //get categories using the postmodel method 
-        const categories = await postModel.getAllCategories();
-        //render the page with the categories supplied to the pug template
-        res.render('create-Post', {categories: categories, error: null});
-    
-    //catch any errors and supply a error message that can be displayed to the pug template
-    } catch (err) {console.error(err);
-        res.render('create-Post', {categories: [], error: "Failed to load categories"});
-    }
-}
+    async createPost(req, res) {
+        try {
+            const { title, content, category_id } = req.body;
+            const user_id = req.session.user.id;
 
-async function createPost(req, res) {
-    try {
-        const { title, content, category_id } = req.body;
-        const user_id = req.session.user.id;
+            // validation
+            if (!title || !content || !category_id) {
+                const categories = await this.postsModel.getAllCategories();
+                return res.render('create-post', { error: "All fields are required", categories: categories, active: "posts"});
+            }
 
-        // validation
-        if (!title || !content || !category_id) {
-            const categories = await postModel.getAllCategories();
-            return res.render('create-post', { error: "All fields are required", categories: categories, active: "posts"});
+            // pass category into model
+            await this.postsModel.createPost(title, content, user_id, category_id);
+
+            res.redirect('/posts');
+
+        } catch (err) {
+            console.error(err);
+
+            const categories = await this.postsModel.getAllCategories();
+
+            res.render('create-post', {error: "Failed to create post", categories: categories, active: "posts"});
         }
-
-        // pass category into model
-        await postModel.createPost(title, content, user_id, category_id);
-
-        res.redirect('/posts');
-
-    } catch (err) {
-        console.error(err);
-
-        const categories = await postModel.getAllCategories();
-
-        res.render('create-post', {error: "Failed to create post", categories: categories, active: "posts"});
     }
-}
 
-async function createComment(req, res) {
-    try {
-        const postId = req.params.id;
-        const {
-            content
-        } = req.body;
-        const userId = req.session.user.id;
-        await postModel.createComment(postId, userId, content);
-        res.redirect(`/posts/${postId}`);
+    async createComment(req, res) {
+        try {
+            const postId = req.params.id;
+            const {
+                content
+            } = req.body;
+            const userId = req.session.user.id;
+            await this.postsModel.createComment(postId, userId, content);
+            res.redirect(`/posts/${postId}`);
 
-    } catch (err) {
-        console.error(err);
-        res.render(`/posts/${req.params.id}`, {error: "Something went wrong"});
+        } catch (err) {
+            console.error(err);
+            res.render(`/posts/${req.params.id}`, {error: "Something went wrong"});
+        }
     }
-}
 
-async function upvoteComment(req, res) {
-    try {
-        const userId = req.session.user.id;
-        const commentId = req.params.id;
-
-        await postModel.voteResponse(userId, commentId, 1);
-
-        res.redirect('back');
-    } catch (err) {
-        console.error(err);
-        res.redirect('back');
+    async upvoteComment(req, res) {
+        try {
+            const userId = req.session.user.id;
+            const commentId = req.params.id;
+            await this.postsModel.voteResponse(userId, commentId, 1);
+            
+            res.redirect('back');
+            
+        } catch (err) {
+            console.error(err);
+            res.redirect('back');
+        }
     }
-}
 
-async function downvoteComment(req, res) {
-    try {
-        const userId = req.session.user.id;
-        const commentId = req.params.id;
+    async downvoteComment(req, res) {
+        try {
+            const userId = req.session.user.id;
+            const commentId = req.params.id;
 
-        await postModel.voteResponse(userId, commentId, -1);
+            await this.postsModel.voteResponse(userId, commentId, -1);
 
-        res.redirect('back');
-    } catch (err) {
-        console.error(err);
-        res.redirect('back');
+            res.redirect('back');
+        } catch (err) {
+            console.error(err);
+            res.redirect('back');
+        }
     }
-}
 
 
 
-//functions we will export.
-module.exports = {
-    showHome,
-    showPosts,
-    showSinglePost,
-    showPostsByOldest,
-    showCreatePost,
-    createPost,
-    createComment,
-    upvoteComment,
-    downvoteComment
 
-};
+module.exports = PostsController

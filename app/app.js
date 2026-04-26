@@ -3,8 +3,16 @@ const express = require("express");
 const session = require('express-session');
 
 // Import Controllers
-const PostsController = require('./controllers/PostsController');
-const UsersController = require('./controllers/UsersController');
+const db = require('./services/db');
+const UsersModel = require('./models/UserModel');
+const PostsModel = require('./models/PostsModel');
+const UserController = require('./controllers/UsersController');
+const PostController = require('./controllers/PostsController');
+
+const usersModel = new UsersModel(db);
+const postsModel = new PostsModel(db, usersModel);
+const userController = new UserController(usersModel, postsModel);
+const postController = new PostController(usersModel, postsModel);
 
 // Create express app
 var app = express();
@@ -55,31 +63,30 @@ function requireGuest(req, res, next) {
 }
 
 //Routes
-app.get('/', PostsController.showHome);
-app.get('/posts', PostsController.showPosts);
-app.get('/posts/new', requireLogin, PostsController.showCreatePost);
-app.post('/posts/new', requireLogin, PostsController.createPost);
-app.post('/posts/:id/reply', requireLogin, PostsController.createComment);
-app.get('/posts/:id', PostsController.showSinglePost);
+app.get('/', postController.showHome.bind(postController));
+app.get('/posts', postController.showPosts.bind(postController));
+app.get('/posts/new', requireLogin, postController.showCreatePost.bind(postController));
+app.post('/posts/new', requireLogin, postController.createPost.bind(postController));
+app.post('/posts/:id/reply', requireLogin, postController.createComment.bind(postController));
+app.get('/posts/:id', postController.showSinglePost.bind(postController));
+app.post('/posts/reply/:id/upvote', requireLogin, postController.upvoteComment.bind(postController));
+app.post('/posts/reply/:id/downvote', requireLogin, postController.downvoteComment.bind(postController));
+
+app.get('/archives', postController.showPostsByOldest.bind(postController));
 
 
+app.get('/leaderboards', requireLogin, userController.listUsers.bind(userController));
+app.get('/users/:id', requireLogin, userController.showUserProfile.bind(userController));
 
-app.get('/archives', PostsController.showPostsByOldest);
+app.get('/sign-up', requireGuest, userController.showSignupForm.bind(userController));
+app.post('/sign-up', requireGuest, userController.signupUser.bind(userController));
+
+app.get('/login', requireGuest, userController.showLogin.bind(userController));
+app.post('/login', requireGuest, userController.loginUser.bind(userController));
+
+app.get('/logout', requireLogin, userController.logout.bind(userController))
 
 
-app.get('/leaderboards', requireLogin, UsersController.listUsers);
-app.get('/users/:id', requireLogin, UsersController.showUserProfile);
-
-app.get('/sign-up', requireGuest, UsersController.showSignupForm);
-app.post('/sign-up', requireGuest, UsersController.signupUser);
-
-app.get('/login', requireGuest, UsersController.showLogin);
-app.post('/login', requireGuest, UsersController.loginUser);
-
-app.get('/logout', requireLogin, UsersController.logout)
-
-app.post('/posts/reply/:id/upvote', requireLogin, PostsController.upvoteComment);
-app.post('/posts/reply/:id/downvote', requireLogin, PostsController.downvoteComment);
 
 // Legal pages
 app.get('/terms', (req, res) => {
