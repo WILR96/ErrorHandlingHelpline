@@ -116,6 +116,8 @@ class UserController {
         user.responses = await this.postsModel.getResponseByUserID(req.params.id)
         user.response_count = user.responses.length;
         user.response_accepted_count = 0;
+        const formattedDate = new Date(user.created_at);
+        user.member_since = formattedDate.toLocaleDateString('en-GB', {month: 'short', year: 'numeric'});
         for (let response of user.responses){
             if (response.is_accepted){
                 user.response_accepted_count++
