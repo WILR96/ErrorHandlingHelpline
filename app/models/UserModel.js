@@ -51,7 +51,7 @@ class UsersModel {
         await this.db.query(`UPDATE users SET reputation = reputation + ? WHERE id = ?`,[points, userId]);
 
         // get the new rep value
-        const [rows] = await this.db.query(`SELECT reputation FROM users WHERE id = ?`,[userId]);
+        const rows = await this.db.query(`SELECT reputation FROM users WHERE id = ?`,[userId]);
         const rep = rows[0].reputation;
 
         // update user title.. 
