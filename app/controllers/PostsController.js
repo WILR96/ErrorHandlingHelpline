@@ -40,26 +40,39 @@ class PostsController {
             const categoryId = req.query.category;
 
             let posts;
+            let thisPage;
 
             //if we have been supplied with a category, then we will get those posts.
             if (categoryId) { 
                 posts = await this.postsModel.getPostByCategory(categoryId)
+                thisPage = categoryId
 
             //else get all posts using the this.postsmodel    
             } else {    
                 posts = await this.postsModel.getAllPosts()
+                thisPage = "posts"
+            }
+
+            for (let post of posts) {
+                post.comments = await this.postsModel.getCommentsByPostId(post.id);
+                for (let comment of post.comments){
+                    if (comment.is_accepted) {
+                        post.solved = true;
+                        break
+                    }
+                }
             }
 
             //get the list of categories
             const categories = await this.postsModel.getAllCategories()
 
             //render the posts page with the returned posts
-            res.render('posts', {posts, active: "posts", selectedCategory: categoryId, categories: categories});
+            res.render('posts', {posts, active: thisPage, selectedCategory: categoryId, categories: categories});
 
             //if there are no posts, then we will display the page without them.
         } catch (err) {
             console.error(err);
-            res.render('posts', {posts: [], categories: [], active: "posts"});
+            res.render('posts', {posts: [], categories: [], active: thisPage});
         }
     }
 

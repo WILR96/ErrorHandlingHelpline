@@ -16,6 +16,10 @@ html(lang="en")
               a(class=active === "home" ? "active" : "", href="/") Home
             li
               a(class=active === "posts" ? "active" : "", href="/posts") Posts
+            if categories
+              each category in categories
+                li
+                  a(class=active == category.id ? "active" : "", href=`/posts?category=${category.id}`)= category.name
             li
               a(class=active === "leaderboards" ? "active" : "", href="/leaderboards") Leaderboards
             li
@@ -23,6 +27,9 @@ html(lang="en")
             if !user   
               li
                 a(class=active === "login" ? "active" : "", href="/login") Login
+            else 
+              li
+                a(class=active === "logout" ? "active" : "", href="/logout") Logout
 
       main.content
         block content
