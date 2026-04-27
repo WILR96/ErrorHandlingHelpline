@@ -130,6 +130,15 @@ class PostModel {
         return rows;
     }
 
+    async getResponseByUserID(id){
+        const rows = await this.db.query(
+            `SELECT * FROM responses WHERE user_id = ?`,
+            [id]
+        );
+        return rows;
+    }
+
+
     async voteResponse(userId, responseId, value) {
         const REP = {
             1: 10,

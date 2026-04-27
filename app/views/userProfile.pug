@@ -42,7 +42,7 @@ block content
           .stat-card-change ↑ Active contributor
 
         .stat-card
-          .stat-card-value= user.answers_count || 0
+          .stat-card-value= user.response_count || 0
           .stat-card-label Answers Given
           .stat-card-change ↑ Helpful responses
 
@@ -52,7 +52,7 @@ block content
           .stat-card-change ↑ Points earned
 
         .stat-card
-          .stat-card-value 5
+          .stat-card-value= user.response_accepted_count || 0
           .stat-card-label Solutions
           .stat-card-change ↑ Problems solved
 
@@ -90,12 +90,7 @@ block content
               .question-card-compact
                 .question-card-compact-title= post.title || 'Question Title'
                 .question-card-compact-meta
-                  span.meta-badge
-                    = post.answers_count || 0
-                    |  answers
-                  span.meta-badge
-                    = post.views_count || 0
-                    |  views
+          
                 a.read-more(href=`/posts/${post.id}`) View Question →
         else
           .empty-state

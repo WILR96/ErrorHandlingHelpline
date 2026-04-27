@@ -112,6 +112,15 @@ class UserController {
     async showUserProfile(req, res) {
         const user = await this.usersModel.getUserById(req.params.id);
         user.postsByUser = await this.postsModel.getPostByUser(req.params.id)
+        user.posts_count = user.postsByUser.length;
+        user.responses = await this.postsModel.getResponseByUserID(req.params.id)
+        user.response_count = user.responses.length;
+        user.response_accepted_count = 0;
+        for (let response of user.responses){
+            if (response.is_accepted){
+                user.response_accepted_count++
+            }
+        }
         res.render('userProfile', {
             user
         });
