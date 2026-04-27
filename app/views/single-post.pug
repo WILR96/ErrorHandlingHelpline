@@ -29,9 +29,11 @@ block content
         each comment in post.comments
           .comment
             .comment-header
-              strong
-                a(href=`/users/${comment.user_id}`)
-                  = `${comment.username} (${comment.reputation} REP)`
+              .comment-row
+                img.avatar(src=`https://ui-avatars.com/api/?name=${comment.username}`)
+                p 
+                  strong 
+                    a(href=`/users/${comment.user_id}`)= `${comment.username} ⭐${comment.reputation}`
             //upvote / downvote
             .comment-votes
               form(method="POST", action=`/posts/reply/${comment.id}/upvote`, style="display:inline")

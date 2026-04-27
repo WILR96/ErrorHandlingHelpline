@@ -25,3 +25,15 @@ block content
                 span.status.not-solved NOT SOLVED
             p= preview
 
+            if post.comments && post.comments.length > 0
+              .comments
+                h4 Comments (#{post.comments.length})
+                each comment in post.comments
+                  .comment
+                    .comment-row
+                      img.avatar(src=`https://ui-avatars.com/api/?name=${comment.username}`)
+                      p 
+                        strong 
+                          a(href=`/users/${comment.user_id}`)= `${comment.username} ⭐${comment.reputation}`
+            else
+              p No comments.. Share your thoughts!

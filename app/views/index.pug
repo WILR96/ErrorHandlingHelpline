@@ -38,10 +38,12 @@ block content
                 h4 Comments (#{post.comments.length})
                 each comment in post.comments
                   .comment
-                    p 
-                      strong 
-                        a(href=`/users/${comment.user_id}`)= `${comment.username} (${comment.reputation})`
-                      br
-                      | #{comment.content}
+                    .comment-row
+                      img.avatar(src=`https://ui-avatars.com/api/?name=${comment.username}`)
+                      p 
+                        strong 
+                          a(href=`/users/${comment.user_id}`)= `${comment.username} ⭐${comment.reputation}`
+                        br
+                        | #{comment.content}
             else
               p No comments.. Share your thoughts!
