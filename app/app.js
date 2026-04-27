@@ -69,6 +69,7 @@ app.get('/posts/new', requireLogin, postController.showCreatePost.bind(postContr
 app.post('/posts/new', requireLogin, postController.createPost.bind(postController));
 app.post('/posts/:id/reply', requireLogin, postController.createComment.bind(postController));
 app.get('/posts/:id', postController.showSinglePost.bind(postController));
+app.post('/posts/reply/:id/report',requireLogin, postController.reportResponse.bind(postController));
 app.post('/posts/reply/:id/upvote', requireLogin, postController.upvoteComment.bind(postController));
 app.post('/posts/reply/:id/downvote', requireLogin, postController.downvoteComment.bind(postController));
 app.post('/posts/reply/:id/accept', requireLogin, postController.acceptResponse.bind(postController));

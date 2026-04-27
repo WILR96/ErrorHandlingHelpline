@@ -197,6 +197,24 @@ class PostsController {
             res.redirect('back');
         }
     }
+    
+    async reportResponse(req, res){
+        try{
+            const responseId = req.params.id;
+            const userId = req.session.user.id;
+
+            const response = await this.postsModel.getResponseById(responseId);
+            console.log(response[0].user_id, userId)
+            if (response[0].user_id === userId){
+                return res.redirect(`/posts/${response[0].post_id}`, {error: "Something went wrong"});
+            }
+            await this.postsModel.reportResponse(responseId, userId);
+            res.redirect(`/posts/${response[0].post_id}`);
+        } catch (err) {
+            console.error(err);
+            res.redirect(`/posts/${response[0].post_id}`);
+        }
+    }
 }
 
 module.exports = PostsController

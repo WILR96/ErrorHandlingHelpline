@@ -121,6 +121,14 @@ class PostModel {
         await this.db.query(`UPDATE responses SET is_accepted = TRUE WHERE id = ?`, [responseId]);
     }
 
+    async getResponseById(id) {
+        const rows = await this.db.query(
+            `SELECT * FROM responses WHERE id = ?`,
+            [id]
+        );
+        return rows;
+    }
+
     async voteResponse(userId, responseId, value) {
         const sql = `
         INSERT INTO response_votes (user_id, response_id, value)
@@ -172,6 +180,14 @@ class PostModel {
                 [responseId]
             );
         }
+    }
+
+    async reportResponse(responseId, userId) {
+        await this.db.query(
+            `INSERT IGNORE INTO response_reports (response_id, reporter_id)
+            VALUES (?, ?)`,
+            [responseId, userId]
+        );
     }
 }
 

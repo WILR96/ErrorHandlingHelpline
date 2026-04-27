@@ -41,6 +41,8 @@ block content
 
               form(method="POST", action=`/posts/reply/${comment.id}/downvote`, style="display:inline")
                 button(type="submit") 👎
+              form(method="POST", action=`/posts/reply/${comment.id}/report`, style="display:inline")
+                button(type="submit") 🚩 Report
 
             if loggedInUsername && loggedInUsername == post.username
               form(method="POST", action=`/posts/reply/${comment.id}/accept`, style="display:inline")
