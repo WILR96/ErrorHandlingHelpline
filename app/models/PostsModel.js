@@ -130,13 +130,71 @@ class PostModel {
     }
 
     async voteResponse(userId, responseId, value) {
-        const sql = `
-        INSERT INTO response_votes (user_id, response_id, value)
-        VALUES (?, ?, ?)
-        ON DUPLICATE KEY UPDATE value = VALUES(value)
-        `;
-        await this.db.query(sql, [userId, responseId, value]);
-}
+        const REP = {
+            1: 10,
+            "-1": -10,
+            0: 0
+        };
+        let oldResponse = 0;
+
+        // 1. get existing vote
+        const existing = await this.db.query(
+            `SELECT value FROM response_votes WHERE user_id = ? AND response_id = ?`,
+            [userId, responseId]
+        );
+        
+        if (existing.length !== 0){
+            oldResponse = existing[0].value;
+        }else {
+            oldResponse = 0;
+        }
+        // 2. get response owner
+        const rows = await this.db.query(
+            `SELECT user_id FROM responses WHERE id = ?`,
+            [responseId]
+        );
+
+        if (!rows.length) throw new Error("Response not found");
+
+        const ownerId = rows[0].user_id;
+
+        // 3. apply vote change
+        if (oldResponse === 0) {
+            await this.db.query(
+                `INSERT INTO response_votes (user_id, response_id, value) 
+                VALUES (?, ?, ?)`,
+                [userId, responseId, value]
+            );
+            await this.usersModel.addRep(ownerId, REP[value]);
+
+        }
+        else if (oldResponse === value) {
+            await this.db.query(
+                `DELETE FROM response_votes WHERE user_id = ? AND response_id = ?`,
+                [userId, responseId]
+            );
+
+            if (oldResponse === 1){
+                await this.usersModel.addRep(ownerId, REP[-1]);
+            }
+            if (oldResponse === -1){
+                await this.usersModel.addRep(ownerId, REP[1]);
+            }
+        }
+        else {
+            await this.db.query(
+                `UPDATE response_votes SET value = ? WHERE user_id = ? AND response_id = ?`,
+                [value, userId, responseId]
+            );
+            if (oldResponse === 1 && value === -1){
+                await this.usersModel.addRep(ownerId, -20);
+            }
+            if (oldResponse === -1 && value === 1){
+                await this.usersModel.addRep(ownerId, 20);
+            }
+        }
+    }
+
     async acceptResponse(responseId, userId) {
         // 1. get response + post owner
         const rows = await this.db.query(`SELECT r.post_id, p.user_id AS post_owner FROM responses r JOIN posts p ON r.post_id = p.id WHERE r.id = ?`, [responseId]);
