@@ -14,5 +14,14 @@ block content
         
   ul
     each post in posts
-      li
-        a(href=`/posts/${post.id}`) #{post.title}
+          - const preview = post.content.length > 150 ? post.content.substring(0, 150) + "..." : post.content
+          .post-card
+            .post-header
+              h3
+                a(href=`/posts/${post.id}`)= post.title 
+              if post.solved
+                span.status.solved SOLVED
+              else
+                span.status.not-solved NOT SOLVED
+            p= preview
+

@@ -10,9 +10,14 @@ class PostsController {
         try {
             //Get posts
             const posts = await this.postsModel.getRecentPosts();
-
             for (let post of posts) {
-                post.comments = await this.postsModel.getCommentsByPostId(post.id)
+                post.comments = await this.postsModel.getCommentsByPostId(post.id);
+                for (let comment of post.comments){
+                    if (comment.is_accepted) {
+                        post.solved = true;
+                        break
+                    }
+                }
             }
 
             //Render the index pug with the response from the this.postsmodel method ( also set active flag to home)
@@ -63,6 +68,15 @@ class PostsController {
         try {
             //get all posts using the this.postsmodel
             const posts = await this.postsModel.getAllPostsByOldest();
+            for (let post of posts){
+                post.comments = await this.postsModel.getCommentsByPostId(post.id);
+                for (let comment of post.comments){
+                    if (comment.is_accepted) {
+                        post.solved = true;
+                        break
+                    }
+                }
+            }     
             //render the posts page with the returned posts
             res.render('archives', {posts, active: "archives"});
             //if there are no posts, then we will display the page without them.
