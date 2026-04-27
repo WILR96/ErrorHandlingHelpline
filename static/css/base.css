@@ -138,7 +138,7 @@ pre code {
 
 ul, ol {
   margin-bottom: var(--space-lg);
-  margin-left: var(--space-lg);
+  margin-left: 1px;
 }
 
 li {

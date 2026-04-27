@@ -89,6 +89,37 @@
   gap: var(--space-lg);
 }
 
+.comment-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+}
+
+.solved {
+  color: rgb(15, 226, 15); /* green */
+}
+
+.not-solved {
+  color: rgb(251, 0, 0); /* red */
+}
+
 .post-card {
   background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(30, 41, 59, 0.5) 100%);
   border: 1px solid var(--border-primary);

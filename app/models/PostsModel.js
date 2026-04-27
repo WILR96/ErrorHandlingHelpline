@@ -49,6 +49,7 @@ class PostModel {
         FROM posts
         JOIN users ON posts.user_id = users.id
         WHERE category_id = ?
+        ORDER BY created_at DESC;
         `;
 
         return await this.db.query(sql, [category_id]);
@@ -248,5 +249,6 @@ class PostModel {
         );
     }
 }
+
 
 module.exports = PostModel;
