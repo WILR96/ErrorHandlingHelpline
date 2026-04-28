@@ -1,5 +1,6 @@
 // Import express.js
 const express = require("express");
+// import express session so we can manage user sessions
 const session = require('express-session');
 
 // Import Controllers
@@ -9,8 +10,10 @@ const PostsModel = require('./models/PostsModel');
 const UserController = require('./controllers/UsersController');
 const PostController = require('./controllers/PostsController');
 
+// init models
 const usersModel = new UsersModel(db);
 const postsModel = new PostsModel(db, usersModel);
+// init controllers
 const userController = new UserController(usersModel, postsModel);
 const postController = new PostController(usersModel, postsModel);
 
@@ -57,35 +60,35 @@ function requireLogin(req, res, next) {
 
 function requireGuest(req, res, next) {
     if (req.session.user) {
-        return res.redirect('/'); // already logged in → go home
+        return res.redirect('/'); // already logged in then go home
     }
     next();
 }
 
-//Routes
+//post routes
 app.get('/', postController.showHome.bind(postController));
 app.get('/posts', postController.showPosts.bind(postController));
 app.get('/posts/new', requireLogin, postController.showCreatePost.bind(postController));
 app.post('/posts/new', requireLogin, postController.createPost.bind(postController));
-app.post('/posts/:id/reply', requireLogin, postController.createComment.bind(postController));
 app.get('/posts/:id', postController.showSinglePost.bind(postController));
+
+//responses (replies, votes, reports, accept answer)
+app.post('/posts/:id/reply', requireLogin, postController.createComment.bind(postController));
 app.post('/posts/reply/:id/report',requireLogin, postController.reportResponse.bind(postController));
 app.post('/posts/reply/:id/upvote', requireLogin, postController.upvoteComment.bind(postController));
 app.post('/posts/reply/:id/downvote', requireLogin, postController.downvoteComment.bind(postController));
 app.post('/posts/reply/:id/accept', requireLogin, postController.acceptResponse.bind(postController));
 
+//other pages 
 app.get('/archives', postController.showPostsByOldest.bind(postController));
-
-
 app.get('/leaderboards', requireLogin, userController.listUsers.bind(userController));
 app.get('/users/:id', requireLogin, userController.showUserProfile.bind(userController));
 
+//user account / auth
 app.get('/sign-up', requireGuest, userController.showSignupForm.bind(userController));
 app.post('/sign-up', requireGuest, userController.signupUser.bind(userController));
-
 app.get('/login', requireGuest, userController.showLogin.bind(userController));
 app.post('/login', requireGuest, userController.loginUser.bind(userController));
-
 app.get('/logout', requireLogin, userController.logout.bind(userController))
 
 
